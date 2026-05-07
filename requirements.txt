@@ -1,0 +1,16 @@
+datasets>=4.8.5
+fastapi
+uvicorn[standard]
+python-multipart
+pydantic-settings
+streamlit
+requests
+langchain
+langchain-community
+langchain-google-genai
+langchain-chroma
+chromadb
+google-generativeai
+ragas
+python-dotenv
+pypdf
