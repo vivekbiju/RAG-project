@@ -1,4 +1,4 @@
-name: CI/CD Build and Push
+name: CI/CD to AWS ECR
 
 on:
   push:
@@ -11,35 +11,31 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Login to Docker Hub
-        uses: docker/login-action@v3
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
 
-      # Build Backend
-      - name: Build and push Backend
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: ./Dockerfile.backend
-          push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/rag-backend:latest
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
 
-      # Build Frontend
-      - name: Build and push Frontend
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: ./Dockerfile.frontend
-          push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/rag-frontend:latest
-      - name: Trigger Deployment
+      # Build & Push Backend
+      - name: Build and Push Backend
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: latest
         run: |
-          curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
-          
-      - name: Trigger Backend Deployment
-        run: curl -X POST ${{ secrets.RENDER_BACKEND_DEPLOY_HOOK }}
+          docker build -t $ECR_REGISTRY/backend:$IMAGE_TAG -f Dockerfile.backend .
+          docker push $ECR_REGISTRY/backend:$IMAGE_TAG
 
-      - name: Trigger Frontend Deployment
-        run: curl -X POST ${{ secrets.RENDER_FRONTEND_DEPLOY_HOOK }}
+      # Build & Push Frontend
+      - name: Build and Push Frontend
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: latest
+        run: |
+          docker build -t $ECR_REGISTRY/frontend:$IMAGE_TAG -f Dockerfile.frontend .
+          docker push $ECR_REGISTRY/frontend:$IMAGE_TAG
