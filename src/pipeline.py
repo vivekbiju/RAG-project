@@ -2,7 +2,6 @@ import os
 from dotenv import load_dotenv
 from langchain_chroma import Chroma
 from langchain_google_genai import GoogleGenerativeAIEmbeddings, ChatGoogleGenerativeAI
-
 from langsmith import traceable
 
 # ROBUST IMPORT STRATEGY
@@ -23,8 +22,18 @@ load_dotenv()
 
 class GeminiRAG:
     def __init__(self, db_dir="./chroma_db"):
-        # 1. Initialize Embeddings
-        self.embeddings = GoogleGenerativeAIEmbeddings(model="models/gemini-embedding-001")
+        # STRIP AND SANITIZE API KEY FOR CLOUD RUNTIMES
+        raw_key = os.getenv("GOOGLE_API_KEY", "")
+        api_key = raw_key.replace('"', '').replace("'", "").strip()
+        
+        if not api_key:
+            print("⚠️ WARNING: GOOGLE_API_KEY is empty or missing from environment!")
+
+        # 1. Initialize Embeddings with explicit key mapping
+        self.embeddings = GoogleGenerativeAIEmbeddings(
+            model="models/gemini-embedding-001",
+            google_api_key=api_key
+        )
         
         # 2. Load Vector Store
         self.vectorstore = Chroma(persist_directory=db_dir, embedding_function=self.embeddings)
@@ -46,8 +55,12 @@ class GeminiRAG:
             self.retriever = base_retriever
             print("System initialized with Base Retriever.")
 
-        # 4. Initialize LLM
-        self.llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature=0.3)
+        # 4. Initialize LLM with explicit key mapping
+        self.llm = ChatGoogleGenerativeAI(
+            model="gemini-2.5-flash", 
+            temperature=0.3,
+            google_api_key=api_key
+        )
 
     @traceable(name="RAG_Retriever", run_type="retriever") 
     def retrieve_and_rerank(self, question):
@@ -79,14 +92,14 @@ class GeminiRAG:
             return " ".join([part['text'] if isinstance(part, dict) and 'text' in part else str(part) for part in content])
         return content
 
-    @traceable(name="RAG_Pipeline", run_type="chain") # <-- Add this parent decorator
+    @traceable(name="RAG_Pipeline", run_type="chain") 
     def query_system(self, question):
         """Standard orchestration for the terminal/CLI mode and parent span."""
         docs = self.retrieve_and_rerank(question)
         answer = self.generate(question, docs)
         return answer
+
 if __name__ == "__main__":
-    # Standard CLI loop for local testing
     rag = GeminiRAG()
     print("\nREADY: Ask about 'Attention Is All You Need'")
     
