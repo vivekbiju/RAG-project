@@ -4,6 +4,8 @@ from langchain_chroma import Chroma
 from langchain_google_genai import GoogleGenerativeAIEmbeddings, ChatGoogleGenerativeAI
 from langsmith import traceable
 
+
+
 # ROBUST IMPORT STRATEGY
 try:
     from langchain.retrievers.contextual_compression import ContextualCompressionRetriever
@@ -22,14 +24,16 @@ load_dotenv()
 
 class GeminiRAG:
     def __init__(self, db_dir="./chroma_db"):
-        # STRIP AND SANITIZE API KEY FOR CLOUD RUNTIMES
+        # DEFENSIVE API KEY SANITIZATION
         raw_key = os.getenv("GOOGLE_API_KEY", "")
-        api_key = raw_key.replace('"', '').replace("'", "").strip()
+        
+        # Strip literal quote marks, backslashes, and whitespaces that break cloud runtimes
+        api_key = raw_key.replace('"', '').replace("'", "").replace('\\', '').strip()
         
         if not api_key:
-            print("⚠️ WARNING: GOOGLE_API_KEY is empty or missing from environment!")
+            print("⚠️ WARNING: GOOGLE_API_KEY resolved as EMPTY after cleaning!")
 
-        # 1. Initialize Embeddings with explicit key mapping
+        # 1. Initialize Embeddings with sanitized explicit key
         self.embeddings = GoogleGenerativeAIEmbeddings(
             model="models/gemini-embedding-001",
             google_api_key=api_key
@@ -53,9 +57,8 @@ class GeminiRAG:
                 self.retriever = base_retriever
         else:
             self.retriever = base_retriever
-            print("System initialized with Base Retriever.")
 
-        # 4. Initialize LLM with explicit key mapping
+        # 4. Initialize LLM with sanitized explicit key
         self.llm = ChatGoogleGenerativeAI(
             model="gemini-2.5-flash", 
             temperature=0.3,

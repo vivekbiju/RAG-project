@@ -5,21 +5,21 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from langchain_chroma import Chroma
 from dotenv import load_dotenv
-
 load_dotenv()
+
 
 class IngestionPipeline:
     def __init__(self, db_dir="./chroma_db", model_name="models/gemini-embedding-001"):
         self.db_dir = db_dir
         
-        # STRIP AND SANITIZE API KEY FOR CLOUD RUNTIMES
+        # DEFENSIVE API KEY SANITIZATION
         raw_key = os.getenv("GOOGLE_API_KEY", "")
-        api_key = raw_key.replace('"', '').replace("'", "").strip()
+        api_key = raw_key.replace('"', '').replace("'", "").replace('\\', '').strip()
         
         if not api_key:
-            print("⚠️ WARNING: GOOGLE_API_KEY is empty or missing from environment inside Ingestion!")
+            print("⚠️ WARNING: GOOGLE_API_KEY is empty inside Ingestion pipeline!")
 
-        # Initialize Embeddings with explicit key parameter
+        # Initialize Embeddings with sanitized explicit key
         self.embeddings = GoogleGenerativeAIEmbeddings(
             model=model_name,
             google_api_key=api_key
