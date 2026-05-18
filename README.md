@@ -13,15 +13,16 @@ pinned: false
 A production-ready, enterprise-grade Retrieval-Augmented Generation (RAG) system engineered to query complex technical research papers. This project demonstrates an advanced **two-stage hybrid retrieval pipeline** leveraging **Google Gemini 2.5 Flash** and a **FlashRank Cross-Encoder Reranker**, coupled with robust multi-container microservices, enterprise LLMOps logging, and automated CI/CD.
 
 ## 🔗 Live Application & Observability
-* **Live Production App:** [Insert your Hugging Face Space Link Here]
-* **Observability Dashboard:** [Insert your LangSmith Project Link Here]
+* **Live Production App:** https://huggingface.co/spaces/Vivekbiju0/RAG-Document-Analyzer
+* **Observability Dashboard:** https://aws.smith.langchain.com/o/a01e2752-b31e-4cf6-b828-f7a2634b5944/projects/p/defd6317-d455-4f33-847a-b3ff3387a35b
 
 ---
 
 ## 📸 System Interface
 Below is a live look at the production interface tracking and rendering advanced context-retrieval spans:
 
-![System Interface Screenshot](image_5fd246.png)
+<img width="1835" height="832" alt="image" src="https://github.com/user-attachments/assets/9adb48a1-485c-4a47-909c-352fbfe55d60" />
+
 
 ---
 
