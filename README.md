@@ -1,3 +1,15 @@
+---
+title: RAG Document Analyzer
+emoji: 🧪
+colorFrom: blue
+colorTo: purple
+sdk: streamlit
+sdk_version: "1.32.0"
+app_file: frontend/app.py
+pinned: false
+---
+
+
 
 # Advanced RAG Research Assistant: Transformer Architecture
 
