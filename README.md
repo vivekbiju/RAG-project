@@ -19,7 +19,6 @@ pinned: false
 A production-ready, enterprise-grade Retrieval-Augmented Generation (RAG) system engineered to query complex technical research papers. This project demonstrates an advanced two-stage hybrid retrieval pipeline leveraging Google Gemini 2.5 Flash and a FlashRank Cross-Encoder Reranker, coupled with robust multi-container microservices, enterprise LLMOps logging, and automated CI/CD.
 
 Live Demo: https://huggingface.co/spaces/Vivekbiju0/RAG-Document-Analyzer   
-Production Repo: https://github.com/Vivekbiju0/RAG-Document-Analyzer
 
 ## Table of Contents
 
