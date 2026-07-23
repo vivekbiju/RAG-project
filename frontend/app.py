@@ -1,3 +1,34 @@
+Python
+import os
+import time
+import subprocess
+import requests
+
+API_URL = "http://127.0.0.1:8000"
+
+def ensure_backend_running():
+    """Ensure the FastAPI backend is active before rendering the UI."""
+    try:
+        # Check if backend responds to root ping
+        res = requests.get(f"{API_URL}/", timeout=2)
+        if res.status_code == 200:
+            return True
+    except Exception:
+        pass
+    
+    # If not running, spawn FastAPI backend as a background process
+    try:
+        subprocess.Popen([
+            "python", "-m", "uvicorn", "backend.main:app", 
+            "--host", "0.0.0.0", "--port", "8000"
+        ])
+        time.sleep(3)  # Allow time for server initialization
+    except Exception as e:
+        print(f"Failed to start backend process: {e}")
+
+# Run startup check on boot
+ensure_backend_running()
+
 import streamlit as st
 import requests
 import json
@@ -21,12 +52,7 @@ st.markdown("""
     """, unsafe_allow_html=True)
 
 # 3. Configuration
-#API_URL = "http://localhost:8000" # for streamlit run
-#API_URL = "http://backend:8000" # for docker run
 
-# Check if running inside Docker, otherwise default to localhost
-# 3. Configuration
-# Hardcode it to use loopback interface since they run side-by-side under Supervisor
 API_URL = "http://127.0.0.1:8000"
 #API_URL = os.getenv("BACKEND_URL", "http://localhost:8000")
 
