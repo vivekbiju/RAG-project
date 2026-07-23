@@ -200,6 +200,7 @@ LANGCHAIN_PROJECT=RAG-Document-Analyzer
 
 ```
 
+
 ### Run Local Container Stack
 
 To spin up the multi-process stack using Docker Compose:
@@ -227,7 +228,24 @@ docker-compose up --build
 <img width="1552" height="477" alt="image" src="https://github.com/user-attachments/assets/090e4dd3-673b-4f7e-b7be-89a18e5ea8ea" />
 
 ---
+### Observability & Monitoring
 
+This project uses **LangSmith** for full-stack LLM tracing, monitoring, and evaluation across the RAG pipeline.
+
+### Tracked Metrics
+* **Trace Count & Execution Status:** Tracks request volume, success rates, and errors over time.
+* **Latency Benchmarks:** Monitors execution time across retriever, chunk reranking, and generation stages.
+* **Cost & Token Usage:** Real-time logging of token counts and estimated API expenditure per query.
+* **LLM Calls & Tool Execution:** Granular inspection of input prompts, context chunks, and model responses.
+
+### LangSmith Setup
+To enable tracing locally or in production, set the following environment variables in your `.env` file:
+
+```bash
+LANGCHAIN_TRACING_V2=true
+LANGCHAIN_API_KEY=ls__your_api_key_here
+LANGCHAIN_PROJECT=RAG-Document_Analyzer
+```
 ## Deployment
 
 ### Automated CI/CD Pipeline (GitHub Actions)
