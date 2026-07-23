@@ -118,8 +118,6 @@ The application features an automated RAGAS benchmark module (`src/evaluation_ut
 
 
 ```
-
-```
    ┌─────────────────────────────────────────────────────────┐
    │                 Hugging Face Spaces (Pod)               │
    │                                                         │
@@ -139,13 +137,10 @@ The application features an automated RAGAS benchmark module (`src/evaluation_ut
 
 ```
 
-```
 
 ### 2. Folder Structure
 
-
 ```
-
 project-root/
 ├── .github/
 │   └── workflows/
