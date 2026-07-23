@@ -14,13 +14,11 @@ pinned: false
 
 ### System Interface
 
-![alt text](image-1.png)
-
+<img width="1810" height="685" alt="Screenshot 2026-07-23 150119" src="https://github.com/user-attachments/assets/669b21dc-6b97-4e9f-af7d-cbc480cb2c72" />
 
 A production-ready, enterprise-grade Retrieval-Augmented Generation (RAG) system engineered to query complex technical research papers. This project demonstrates an advanced two-stage hybrid retrieval pipeline leveraging Google Gemini 2.5 Flash and a FlashRank Cross-Encoder Reranker, coupled with robust multi-container microservices, enterprise LLMOps logging, and automated CI/CD.
 
-Live Demo: https://huggingface.co/spaces/Vivekbiju0/RAG-Document-Analyzer  
-Observability Dashboard: https://aws.smith.langchain.com/o/a01e2752-b31e-4cf6-b828-f7a2634b5944/projects/p/defd6317-d455-4f33-847a-b3ff3387a35b  
+Live Demo: https://huggingface.co/spaces/Vivekbiju0/RAG-Document-Analyzer   
 Production Repo: https://github.com/Vivekbiju0/RAG-Document-Analyzer
 
 ## Table of Contents
@@ -171,10 +169,9 @@ docker-compose up --build
 
 ## Screenshots
 
-![alt text](image.png)
-
 Below is a live look at the production interface tracking and rendering advanced context-retrieval spans:
 
+<img width="1822" height="760" alt="Screenshot 2026-07-23 145917" src="https://github.com/user-attachments/assets/f92af412-07a9-4170-b406-ccc0b0cc776a" />
 
 ## Deployment
 
